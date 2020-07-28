@@ -2,7 +2,7 @@
 
 ## Note
 
-- Wait of offcial <https://github.com/go-oauth2/mongo> update to V4
+- Wait of official <https://github.com/go-oauth2/mongo> update to V4
 
 ## Usage
 
