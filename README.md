@@ -1,12 +1,8 @@
-# Mongo Storage for [OAuth 2.0](https://github.com/go-oauth2/oauth2)
+# Mongo Storage for [OAuth 2.0](https://github.com/go-oauth2/oauth2) (*Temporary)
 
-[![Build][Build-Status-Image]][Build-Status-Url] [![Codecov][codecov-image]][codecov-url] [![ReportCard][reportcard-image]][reportcard-url] [![GoDoc][godoc-image]][godoc-url] [![License][license-image]][license-url]
+## Note
 
-## Install
-
-``` bash
-$ go get -u -v gopkg.in/go-oauth2/mongo.v3
-```
+- Wait of offcial <https://github.com/go-oauth2/mongo> update to V4
 
 ## Usage
 
@@ -14,20 +10,25 @@ $ go get -u -v gopkg.in/go-oauth2/mongo.v3
 package main
 
 import (
-	"gopkg.in/go-oauth2/mongo.v3"
-	"gopkg.in/oauth2.v3/manage"
+	store "your-package/mongo"
 )
 
 func main() {
 	manager := manage.NewDefaultManager()
 
+	config := &mongo.Config{
+		URL: "mongodb+srv://ex01:<password>@cluster0.0zkpo.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority",
+		DB:  "oauth2",
+	}
+
 	// use mongodb token store
-	manager.MapTokenStorage(
-		mongo.NewTokenStore(mongo.NewConfig(
-			"mongodb://127.0.0.1:27017",
-			"oauth2",
-		)),
-	)
+	tokenStore := store.NewTokenStore(config)
+	manager.MapTokenStorage(tokenStore, nil)
+
+	// use mongodb client store
+	clientStore := mongo.NewClientStore(config)
+	manager.MapClientStorage(clientStore)
+
 	// ...
 }
 ```
@@ -37,14 +38,3 @@ func main() {
 ```
 Copyright (c) 2016 Lyric
 ```
-
-[Build-Status-Url]: https://travis-ci.org/go-oauth2/mongo
-[Build-Status-Image]: https://travis-ci.org/go-oauth2/mongo.svg?branch=master
-[codecov-url]: https://codecov.io/gh/go-oauth2/mongo
-[codecov-image]: https://codecov.io/gh/go-oauth2/mongo/branch/master/graph/badge.svg
-[reportcard-url]: https://goreportcard.com/report/gopkg.in/go-oauth2/mongo.v3
-[reportcard-image]: https://goreportcard.com/badge/gopkg.in/go-oauth2/mongo.v3
-[godoc-url]: https://godoc.org/gopkg.in/go-oauth2/mongo.v3
-[godoc-image]: https://godoc.org/gopkg.in/go-oauth2/mongo.v3?status.svg
-[license-url]: http://opensource.org/licenses/MIT
-[license-image]: https://img.shields.io/npm/l/express.svg
